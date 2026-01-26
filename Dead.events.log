@@ -1,0 +1,2 @@
+2026-01-26T21:31:25.538755800 | Consumer-1 | ERROR | 1 |  Event- 1 | Processing failed after 3 retries
+2026-01-26T21:31:25.564546600 | Consumer-1 | ERROR | 1 |  Event- 1 |  Failed after: 3 retries
