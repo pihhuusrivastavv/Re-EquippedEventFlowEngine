@@ -6,8 +6,9 @@ import java.util.Random;
 import java.util.logging.Logger;
 import com.anshika.Re_EquippedEventFlowEngine.FileStorage.EventFileInformationStore;
 
-public class EventProducer extends Thread
+public class EventProducer implements Runnable
 {
+
     private final EventQueue queue;
     private final Random random= new Random();
     private int eventNumber=1;

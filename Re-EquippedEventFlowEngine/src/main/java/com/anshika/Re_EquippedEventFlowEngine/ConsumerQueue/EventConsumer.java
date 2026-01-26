@@ -8,21 +8,24 @@ import java.util.logging.Logger;
 import com.anshika.Re_EquippedEventFlowEngine.QueueInitialization.ConfirmedEventStore;
 import com.anshika.Re_EquippedEventFlowEngine.StorageEvents.EventStore;
 
-public class EventConsumer extends Thread
+public class EventConsumer implements Runnable
 {
 
     private final EventQueue queue;
+    private final DeadAndFailedEventStore deadEvents;
+    private final EventStore eventStore;
     private final Random random=new Random();
     private static final int max_retries=3;
     private static final Logger logger=Logger.getLogger(EventConsumer.class.getName());
-    private final DeadAndFailedEventStore deadEvents=new DeadAndFailedEventStore();
-    private final ConfirmedEventStore confirmStore;
-    private final EventStore eventStore=new EventStore();
 
-    public EventConsumer(EventQueue queue ,ConfirmedEventStore confirmStore)
+    private final ConfirmedEventStore confirmStore;
+
+    public EventConsumer(EventQueue queue ,ConfirmedEventStore confirmStore,DeadAndFailedEventStore deadEvents,EventStore eventStore)
     {
         this.queue=queue;
         this.confirmStore=confirmStore;
+        this.deadEvents=deadEvents;
+        this.eventStore=eventStore;
     }
     @Override
     public void run()
@@ -47,29 +50,29 @@ public class EventConsumer extends Thread
                             throw new RuntimeException("Random error...");
 
                         logger.info(Thread.currentThread().getName() + " processed " + event.getType() + ":" + event.getMessage());
-                        success = true;
 
                         confirmStore.confirmedEvent(event.getId());
-                        logger.info("Confirmation received for Event " + event.getId());
+                        success=true;
+
                     } catch (Exception e) {
                         attempt++;
                         logger.warning(Thread.currentThread().getName() + " failed processing " + event.getType() + ":" + "| attempt " + attempt);
 
-                        if (attempt == max_retries) {
-                            logger.severe(Thread.currentThread().getName() + " sending to DLQ file " + event.getType() + ":" + event.getMessage());
+                        if (attempt == max_retries)
+                        {
+
+                            //logger.severe(Thread.currentThread().getName() + " sending to DLQ file " + event.getType() + ":" + event.getMessage());
                             deadEvents.persistDeadEvents(event, Thread.currentThread().getName(), "Processing failed after " + max_retries + " retries");
                         }
                     }
                 }
+                eventStore.store(event);
                 if (success)
                 {
-                    eventStore.store(event);
                     logger.info("Event processed successfully: "+event.getId());
                 }
                 else
                 {
-                    eventStore.store(event);
-                    deadEvents.persistDeadEvents(event,Thread.currentThread().getName()," Failed after: "+max_retries+" retries");
                     logger.severe("Event moved to DLQ: "+event.getId());
                 }
 
@@ -80,6 +83,7 @@ public class EventConsumer extends Thread
         catch(InterruptedException e)
         {
             logger.info(Thread.currentThread().getName()+ " interrupted, exiting. ");
+            Thread.currentThread().interrupt();
         }
     }
 
