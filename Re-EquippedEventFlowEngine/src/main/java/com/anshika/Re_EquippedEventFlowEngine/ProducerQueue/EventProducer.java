@@ -14,10 +14,12 @@ public class EventProducer implements Runnable
     private int eventNumber=1;
     private final EventFileInformationStore file_info;
     private static final Logger logger=Logger.getLogger(EventProducer.class.getName());
+    private final int totalEvents;
 
-    public EventProducer(EventQueue queue)
+    public EventProducer(EventQueue queue,int totalEvents)
     {
         this.queue=queue;
+        this.totalEvents=totalEvents;
         this.file_info=new EventFileInformationStore();
     }
     @Override
@@ -25,7 +27,7 @@ public class EventProducer implements Runnable
     {
         try
         {
-            while(eventNumber<=10)
+            while(eventNumber<=totalEvents)
             {
                 EventType type = EventType.values()[random.nextInt(EventType.values().length)];
                 Event event =new Event(eventNumber," Event- "+eventNumber,type);
@@ -46,6 +48,7 @@ public class EventProducer implements Runnable
         catch(InterruptedException e)
         {
             logger.warning("Producer interrupted,exiting...");
+            Thread.currentThread().interrupt();
         }
     }
 }

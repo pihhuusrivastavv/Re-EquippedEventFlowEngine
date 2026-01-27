@@ -4,7 +4,7 @@ public enum EventType
 {
     INFO(1),
     WARNING(2),
-    ERROR(3);
+    SEVERE(3);
     private final int priority;
     EventType( int priority)
     {

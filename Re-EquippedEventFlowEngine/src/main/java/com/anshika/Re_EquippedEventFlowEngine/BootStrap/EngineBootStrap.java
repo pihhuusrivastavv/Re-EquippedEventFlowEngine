@@ -8,10 +8,9 @@ import com.anshika.Re_EquippedEventFlowEngine.ConsumerQueue.EventConsumer;
 import com.anshika.Re_EquippedEventFlowEngine.StorageEvents.EventStore;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -23,39 +22,53 @@ public class EngineBootStrap
     private static final Logger logger =
             Logger.getLogger(EngineBootStrap.class.getName());
 
-    @Autowired
-    private EventQueue queue;
+    private final EventQueue queue;
 
-    @Autowired
-    private EventRecovery recovery;
+    private final EventRecovery recovery;
 
-    @Autowired
-    private ConfirmedEventStore confirmStore;
+    private final ConfirmedEventStore confirmStore;
 
+    @Value("${eventflow.consumer.thread-count}")
+    private int consumerThreads;
 
-    private EventConsumer consumer1;
-    private EventConsumer consumer2;
+    @Value("${eventflow.consumer.max-retries}")
+    private int maxRetires;
+
+    @Value("${eventflow.producer.event-count}")
+    private int producerEventCount;
+
+    private EventConsumer[] consumers;
     private EventProducer producer;
 
     private ExecutorService executor;
 
 
+    public EngineBootStrap(EventQueue queue,EventRecovery recovery,ConfirmedEventStore confirmStore)
+    {
+        this.queue=queue;
+        this.recovery=recovery;
+        this.confirmStore=confirmStore;
+    }
+
     @PostConstruct
-    public void startEngine() throws InterruptedException
+    public void startEngine()
     {
 
         recovery.loadEvents(queue, confirmStore);
 
-        producer = new EventProducer(queue);
+        producer = new EventProducer(queue,producerEventCount);
 
-        consumer1=new EventConsumer(queue,confirmStore,new DeadAndFailedEventStore(),new EventStore());
-        consumer2=new EventConsumer(queue,confirmStore,new DeadAndFailedEventStore(),new EventStore());
+        consumers=new EventConsumer[consumerThreads];
+        for(int i=0;i<consumerThreads;i++)
+        {
+            consumers[i]=new EventConsumer(queue,confirmStore,new DeadAndFailedEventStore(),new EventStore(),maxRetires);
+        }
 
-        executor=java.util.concurrent.Executors.newFixedThreadPool(3);
+        executor=java.util.concurrent.Executors.newFixedThreadPool(1+consumerThreads);
         executor.submit(producer);
-        executor.submit(consumer1);
-        executor.submit(consumer2);
 
+        for(EventConsumer c: consumers)
+            executor.submit(c);
 
         logger.info("Event engine started successfully.");
     }
@@ -67,6 +80,7 @@ public class EngineBootStrap
         logger.info("Shutdown initiated..");
 
         queue.shutDownQueue();
+
 
         executor.shutdown();
         try {

@@ -15,17 +15,18 @@ public class EventConsumer implements Runnable
     private final DeadAndFailedEventStore deadEvents;
     private final EventStore eventStore;
     private final Random random=new Random();
-    private static final int max_retries=3;
+    private final int maxRetries;
     private static final Logger logger=Logger.getLogger(EventConsumer.class.getName());
 
     private final ConfirmedEventStore confirmStore;
 
-    public EventConsumer(EventQueue queue ,ConfirmedEventStore confirmStore,DeadAndFailedEventStore deadEvents,EventStore eventStore)
+    public EventConsumer(EventQueue queue ,ConfirmedEventStore confirmStore,DeadAndFailedEventStore deadEvents,EventStore eventStore,int maxRetries)
     {
         this.queue=queue;
         this.confirmStore=confirmStore;
         this.deadEvents=deadEvents;
         this.eventStore=eventStore;
+        this.maxRetries=maxRetries;
     }
     @Override
     public void run()
@@ -44,7 +45,7 @@ public class EventConsumer implements Runnable
                 }
                 int attempt=0;
                 boolean success=false;
-                while(attempt<max_retries && !success) {
+                while(attempt<maxRetries && !success) {
                     try {
                         if (random.nextInt(5) == 0)
                             throw new RuntimeException("Random error...");
@@ -58,11 +59,9 @@ public class EventConsumer implements Runnable
                         attempt++;
                         logger.warning(Thread.currentThread().getName() + " failed processing " + event.getType() + ":" + "| attempt " + attempt);
 
-                        if (attempt == max_retries)
+                        if (attempt == maxRetries)
                         {
-
-                            //logger.severe(Thread.currentThread().getName() + " sending to DLQ file " + event.getType() + ":" + event.getMessage());
-                            deadEvents.persistDeadEvents(event, Thread.currentThread().getName(), "Processing failed after " + max_retries + " retries");
+                            deadEvents.persistDeadEvents(event, Thread.currentThread().getName(), "Processing failed after " + maxRetries + " retries");
                         }
                     }
                 }

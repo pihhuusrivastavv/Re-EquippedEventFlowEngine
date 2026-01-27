@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Re-EquippedEventFlowEngine.iml" filepath="$PROJECT_DIR$/.idea/Re-EquippedEventFlowEngine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Re-EquippedEventFlowEngine/Re-EquippedEventFlowEngine.iml" filepath="$PROJECT_DIR$/Re-EquippedEventFlowEngine/Re-EquippedEventFlowEngine.iml" />
     </modules>
   </component>
 </project>
