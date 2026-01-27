@@ -4,9 +4,10 @@ import com.anshika.Re_EquippedEventFlowEngine.ConstructorInitialization.Event;
 import com.anshika.Re_EquippedEventFlowEngine.QueueInitialization.EventQueue;
 import com.anshika.Re_EquippedEventFlowEngine.DeadLetterQueue.DeadAndFailedEventStore;
 import java.util.Random;
-import java.util.logging.Logger;
 import com.anshika.Re_EquippedEventFlowEngine.QueueInitialization.ConfirmedEventStore;
 import com.anshika.Re_EquippedEventFlowEngine.StorageEvents.EventStore;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class EventConsumer implements Runnable
 {
@@ -16,7 +17,7 @@ public class EventConsumer implements Runnable
     private final EventStore eventStore;
     private final Random random=new Random();
     private final int maxRetries;
-    private static final Logger logger=Logger.getLogger(EventConsumer.class.getName());
+    private static final Logger logger=LoggerFactory.getLogger(EventConsumer.class);
 
     private final ConfirmedEventStore confirmStore;
 
@@ -37,7 +38,11 @@ public class EventConsumer implements Runnable
             {
                 Event event = queue.consume();
                 if(event==null)
+                {
+                    logger.info("No events present");
                     break;
+                }
+
                 if(confirmStore.isConfirmed(event.getId()))
                 {
                     logger.info("Skipping already confirmed Event "+event.getId());
@@ -46,18 +51,21 @@ public class EventConsumer implements Runnable
                 int attempt=0;
                 boolean success=false;
                 while(attempt<maxRetries && !success) {
+                    logger.info("Checking Event");
                     try {
-                        if (random.nextInt(5) == 0)
-                            throw new RuntimeException("Random error...");
+                        if (random.nextInt(5) == 0) {
+                            logger.error("Error");
+                        }
 
                         logger.info(Thread.currentThread().getName() + " processed " + event.getType() + ":" + event.getMessage());
 
                         confirmStore.confirmedEvent(event.getId());
+                        logger.info("Confirmed Event found");
                         success=true;
 
                     } catch (Exception e) {
                         attempt++;
-                        logger.warning(Thread.currentThread().getName() + " failed processing " + event.getType() + ":" + "| attempt " + attempt);
+                        logger.warn(Thread.currentThread().getName() + "Event type failed processing at attempts | type={} attempt={} ",event.getType(), attempt);
 
                         if (attempt == maxRetries)
                         {
@@ -66,13 +74,14 @@ public class EventConsumer implements Runnable
                     }
                 }
                 eventStore.store(event);
+                logger.info("Event Persisted and stored");
                 if (success)
                 {
                     logger.info("Event processed successfully: "+event.getId());
                 }
                 else
                 {
-                    logger.severe("Event moved to DLQ: "+event.getId());
+                    logger.warn("Event moved to DLQ: "+event.getId());
                 }
 
                 Thread.sleep(500);

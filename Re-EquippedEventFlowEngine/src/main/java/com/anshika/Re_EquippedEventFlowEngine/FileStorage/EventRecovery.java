@@ -6,12 +6,13 @@ import com.anshika.Re_EquippedEventFlowEngine.QueueInitialization.EventQueue;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EventRecovery
 {
     private final String file="events_info";
-    private final Logger logger =Logger.getLogger(EventRecovery.class.getName());
+    private final Logger logger =LoggerFactory.getLogger(EventRecovery.class);
 
     public void loadEvents(EventQueue queue, ConfirmedEventStore confirmStore)
     {
@@ -32,12 +33,13 @@ public class EventRecovery
         }
         catch(IOException  | InterruptedException e)
         {
-            logger.severe("Recovery event: "+e.getMessage());
+            logger.info("Recovery event: "+e.getMessage());
 
         }
     }
     private Event parseEvent(String line)
     {
+        logger.info("Parsing an event");
         String[] part=line.split("\\|");
         int id=Integer.parseInt(part[0]);
         String msg= part[1];

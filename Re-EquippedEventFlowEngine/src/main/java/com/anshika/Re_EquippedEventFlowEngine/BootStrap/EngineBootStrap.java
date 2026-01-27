@@ -13,14 +13,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @Component
 public class EngineBootStrap
 {
     private static final Logger logger =
-            Logger.getLogger(EngineBootStrap.class.getName());
+            LoggerFactory.getLogger(EngineBootStrap.class);
 
     private final EventQueue queue;
 
@@ -53,6 +54,8 @@ public class EngineBootStrap
     @PostConstruct
     public void startEngine()
     {
+        logger.info("Starting EventFlowEngine");
+        logger.info("Config | consumers={} maxRetries={} producerEvents{}",consumerThreads,maxRetires,producerEventCount);
 
         recovery.loadEvents(queue, confirmStore);
 
@@ -65,12 +68,14 @@ public class EngineBootStrap
         }
 
         executor=java.util.concurrent.Executors.newFixedThreadPool(1+consumerThreads);
+        logger.info("Executor initialized |  poolSize={}",1+consumerThreads);
         executor.submit(producer);
 
         for(EventConsumer c: consumers)
             executor.submit(c);
 
-        logger.info("Event engine started successfully.");
+        logger.info("EventFlowEngine started successfully.");
+
     }
 
     @PreDestroy
@@ -78,18 +83,20 @@ public class EngineBootStrap
     {
 
         logger.info("Shutdown initiated..");
-
         queue.shutDownQueue();
-
+        logger.info("Queue Shutdown has been initiated");
 
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+            if (!executor.awaitTermination(5, TimeUnit.SECONDS))
+            {
+                logger.warn("Executor failed at terminating on time, force shutdown has been initiated.");
                 executor.shutdown();
             }
         }
         catch(InterruptedException e)
         {
+            logger.warn("Shutdown interrupted");
             executor.shutdown();
             Thread.currentThread().interrupt();
         }
