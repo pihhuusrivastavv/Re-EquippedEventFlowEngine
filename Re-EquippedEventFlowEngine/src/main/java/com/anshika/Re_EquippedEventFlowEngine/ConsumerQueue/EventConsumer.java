@@ -34,7 +34,7 @@ public class EventConsumer implements Runnable
     {
         try
         {
-            while(true)
+            while(!Thread.currentThread().isInterrupted())
             {
                 Event event = queue.consume();
                 if(event==null)
