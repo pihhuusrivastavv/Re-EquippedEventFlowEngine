@@ -56,8 +56,8 @@ public class EngineBootStrap
     @PostConstruct
     public void startEngine()
     {
-        logger.info("Starting EventFlowEngine");
-        logger.info("Config | consumers= {} maxRetries= {} producerEvents= {}",consumerThreads,maxRetires,producerEventCount);
+        logger.info("Starting EventFlowEngine...\n");
+        logger.info("Config | consumers= {} maxRetries= {} producerEvents= {} \n" ,consumerThreads,maxRetires,producerEventCount);
 
         recovery.loadEvents(queue, confirmStore);
 
