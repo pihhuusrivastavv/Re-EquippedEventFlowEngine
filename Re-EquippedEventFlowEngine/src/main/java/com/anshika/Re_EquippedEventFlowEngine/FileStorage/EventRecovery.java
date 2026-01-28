@@ -39,7 +39,6 @@ public class EventRecovery
     }
     private Event parseEvent(String line)
     {
-        logger.info("Parsing an event");
         String[] part=line.split("\\|");
         int id=Integer.parseInt(part[0]);
         String msg= part[1];

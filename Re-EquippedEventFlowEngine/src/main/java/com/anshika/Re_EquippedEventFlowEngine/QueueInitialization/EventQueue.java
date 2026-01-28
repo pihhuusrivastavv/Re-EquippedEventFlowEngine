@@ -32,7 +32,7 @@ public class EventQueue
         }
         queue.add(event);
 
-        logger.info("Event published | message={} queueSize={}",event.getMessage(),queue.size());
+        logger.info("Event published | message= {} queueSize= {}",event.getMessage(),queue.size());
 
         notifyAll();
     }

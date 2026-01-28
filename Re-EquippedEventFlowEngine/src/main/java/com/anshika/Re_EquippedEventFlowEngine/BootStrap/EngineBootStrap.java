@@ -7,7 +7,7 @@ import com.anshika.Re_EquippedEventFlowEngine.ProducerQueue.EventProducer;
 import com.anshika.Re_EquippedEventFlowEngine.ConsumerQueue.EventConsumer;
 import com.anshika.Re_EquippedEventFlowEngine.StorageEvents.EventStore;
 import com.anshika.Re_EquippedEventFlowEngine.Engine.EventThreadManager;
-import com.anshika.Re_EquippedEventFlowEngine.Engine.MultiConsumerRunnable;
+//import com.anshika.Re_EquippedEventFlowEngine.Engine.MultiConsumerRunnable;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -57,19 +57,19 @@ public class EngineBootStrap
     public void startEngine()
     {
         logger.info("Starting EventFlowEngine");
-        logger.info("Config | consumers={} maxRetries={} producerEvents{}",consumerThreads,maxRetires,producerEventCount);
+        logger.info("Config | consumers= {} maxRetries= {} producerEvents= {}",consumerThreads,maxRetires,producerEventCount);
 
         recovery.loadEvents(queue, confirmStore);
 
-        //EventProducer producer = new EventProducer(queue,producerEventCount);
+        producer = new EventProducer(queue,producerEventCount);
 
-        //EventConsumer[] consumers=new EventConsumer[consumerThreads];
+        consumers=new EventConsumer[consumerThreads];
 
         for(int i=0;i<consumerThreads;i++)
         {
             consumers[i]=new EventConsumer(queue,confirmStore,new DeadAndFailedEventStore(),new EventStore(),maxRetires);
         }
-        threadManager.startingEngine(producer,new MultiConsumerRunnable(consumers));
+        threadManager.startingEngine(producer, consumers);
 
         logger.info("EventFlowEngine started successfully.");
 
