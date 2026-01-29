@@ -1,4 +1,4 @@
-package com.anshika.Re_EquippedEventFlowEngine.web.request;
+package com.anshika.Re_EquippedEventFlowEngine.Web.Request;
 
 public class CreateEventRequest
 {
