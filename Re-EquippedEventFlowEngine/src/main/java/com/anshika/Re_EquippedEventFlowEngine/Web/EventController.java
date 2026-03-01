@@ -31,7 +31,7 @@ public class EventController
         publisher.publish(request.getType(), request.getEventLoad());
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public EventResponse getEventById(@PathVariable int id)
     {
         return fileStore.getEventById(id).map(EventResponse::new).orElseThrow(()->new RuntimeException("Event not found with id "+id));

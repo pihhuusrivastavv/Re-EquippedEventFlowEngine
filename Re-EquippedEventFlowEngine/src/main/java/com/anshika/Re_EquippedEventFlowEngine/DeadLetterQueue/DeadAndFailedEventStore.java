@@ -7,12 +7,20 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DeadAndFailedEventStore
 {
     private static final String file_name="Dead.events.log";
     private static final Logger logger=LoggerFactory.getLogger(DeadAndFailedEventStore.class);
+
+    public DeadAndFailedEventStore()
+    {
+
+    }
     public synchronized void persistDeadEvents(Event event,String customerName,String reason)
+
     {
         try(FileWriter writer=new FileWriter(file_name,true))
         {

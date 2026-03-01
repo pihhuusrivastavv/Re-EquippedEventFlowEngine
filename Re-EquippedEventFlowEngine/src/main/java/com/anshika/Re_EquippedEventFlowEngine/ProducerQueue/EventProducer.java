@@ -18,11 +18,11 @@ public class EventProducer implements Runnable
     private static final Logger logger= LoggerFactory.getLogger(EventProducer.class);
     private final int totalEvents;
 
-    public EventProducer(EventQueue queue,int totalEvents)
+    public EventProducer(EventQueue queue,int totalEvents,EventFileInformationStore file_info)
     {
         this.queue=queue;
         this.totalEvents=totalEvents;
-        this.file_info=new EventFileInformationStore();
+        this.file_info=file_info;
     }
     @Override
     public void run()

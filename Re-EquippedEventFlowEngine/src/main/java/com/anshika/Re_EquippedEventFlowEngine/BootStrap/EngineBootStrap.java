@@ -1,6 +1,7 @@
 package com.anshika.Re_EquippedEventFlowEngine.BootStrap;
 import com.anshika.Re_EquippedEventFlowEngine.DeadLetterQueue.DeadAndFailedEventStore;
 import com.anshika.Re_EquippedEventFlowEngine.FileStorage.EventRecovery;
+import com.anshika.Re_EquippedEventFlowEngine.FileStorage.EventFileInformationStore;
 import com.anshika.Re_EquippedEventFlowEngine.QueueInitialization.EventQueue;
 import com.anshika.Re_EquippedEventFlowEngine.QueueInitialization.ConfirmedEventStore;
 import com.anshika.Re_EquippedEventFlowEngine.ProducerQueue.EventProducer;
@@ -32,6 +33,13 @@ public class EngineBootStrap
 
     private final EventThreadManager threadManager;
 
+    private final EventFileInformationStore file_info;
+
+    private final DeadAndFailedEventStore deadEvents;
+
+    private final EventStore eventStore;
+
+
     @Value("${eventflow.consumer.thread-count}")
     private int consumerThreads;
 
@@ -45,12 +53,15 @@ public class EngineBootStrap
     private EventProducer producer;
 
 
-    public EngineBootStrap(EventQueue queue,EventRecovery recovery,ConfirmedEventStore confirmStore,EventThreadManager threadManager)
+    public EngineBootStrap(EventQueue queue,EventRecovery recovery,ConfirmedEventStore confirmStore,EventThreadManager threadManager,EventFileInformationStore file_info,DeadAndFailedEventStore deadEvents,EventStore eventStore)
     {
         this.queue=queue;
         this.recovery=recovery;
         this.confirmStore=confirmStore;
         this.threadManager=threadManager;
+        this.file_info=file_info;
+        this.deadEvents=deadEvents;
+        this.eventStore=eventStore;
     }
 
     @PostConstruct
@@ -61,13 +72,13 @@ public class EngineBootStrap
 
         recovery.loadEvents(queue, confirmStore);
 
-        producer = new EventProducer(queue,producerEventCount);
+        producer = new EventProducer(queue,producerEventCount,file_info);
 
         consumers=new EventConsumer[consumerThreads];
 
         for(int i=0;i<consumerThreads;i++)
         {
-            consumers[i]=new EventConsumer(queue,confirmStore,new DeadAndFailedEventStore(),new EventStore(),maxRetires);
+            consumers[i]=new EventConsumer(queue,confirmStore,deadEvents,eventStore,maxRetires);
         }
         threadManager.startingEngine(producer, consumers);
 

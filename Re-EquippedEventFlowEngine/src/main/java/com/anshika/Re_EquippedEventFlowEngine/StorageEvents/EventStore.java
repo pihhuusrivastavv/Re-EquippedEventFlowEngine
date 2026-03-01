@@ -5,11 +5,18 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EventStore
 {
     private static final String file="events.info";
     private final Logger logger=LoggerFactory.getLogger(EventStore.class);
+
+    public EventStore()
+    {
+
+    }
     public synchronized void store(Event event)
     {
         try(FileWriter writer=new FileWriter(file,true))

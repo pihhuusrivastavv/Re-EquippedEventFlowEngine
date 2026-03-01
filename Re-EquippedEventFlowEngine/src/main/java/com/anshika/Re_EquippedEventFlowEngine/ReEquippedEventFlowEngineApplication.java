@@ -11,5 +11,4 @@ public class ReEquippedEventFlowEngineApplication
 	{
 		SpringApplication.run(ReEquippedEventFlowEngineApplication.class, args);
 	}
-
 }
