@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-@Component
+
 public class EventQueue
 {
     private final Queue<Event>queue =new LinkedList<>();

@@ -11,51 +11,53 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class EventThreadManager
-{
-    private static final Logger logger=LoggerFactory.getLogger(EventThreadManager.class);
+public class EventThreadManager {
+    private static final Logger logger = LoggerFactory.getLogger(EventThreadManager.class);
     private Thread[] consumerThreads;
     private Thread producerThread;
 
     //Starting Threads
     //Threads are generic
-    public void startingEngine(Runnable producer, EventConsumer[] consumers)
-    {
+    public void startingEngine(Runnable producer, EventConsumer[] consumers) {
         logger.info("Starting Event Threads of Engine");
 
-        producerThread=new Thread(producer,"EVENT-PRODUCER");
+        producerThread = new Thread(producer, "EVENT-PRODUCER");
         producerThread.start();
 
-        consumerThreads=new Thread[consumers.length];
-        for(int i=0;i<consumers.length;i++)
-        {
-            consumerThreads[i]=new Thread(consumers[i],"EVENT-CONSUMER "+i);
+        consumerThreads = new Thread[consumers.length];
+        for (int i = 0; i < consumers.length; i++) {
+            consumerThreads[i] = new Thread(consumers[i], "EVENT-CONSUMER " + i);
             consumerThreads[i].start();
         }
     }
 
 
     //Stopping Thread
-    public void stopEngine()
-    {
+    public void stopEngine() {
         logger.info("Stopping Event Threads of Engine");
 
-        if(producerThread!=null && producerThread.isAlive())
-        {
+        if (producerThread != null) {
             producerThread.interrupt();
-            logger.warn("Producer Thread interrupted");
         }
-        if(consumerThreads!=null)
-        {
-            for(Thread t:consumerThreads)
-            {
-                if(t!=null && t.isAlive())
-                {
+        if (consumerThreads != null) {
+            for (Thread t : consumerThreads) {
+                if (t != null) {
                     t.interrupt();
-                    logger.warn("Consumer Thread interrupted");
-
                 }
             }
         }
+        try {
+            if (producerThread != null)
+                producerThread.join();
+            if (consumerThreads != null) {
+                for (Thread t : consumerThreads) {
+                    if (t != null)
+                        t.join();
+                }
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        logger.info("All threads stopped gracefully");
     }
 }
