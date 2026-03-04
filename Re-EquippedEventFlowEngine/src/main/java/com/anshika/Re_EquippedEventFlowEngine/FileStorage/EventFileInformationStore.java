@@ -24,7 +24,7 @@ public class EventFileInformationStore {
         {
             try (FileWriter writer = new FileWriter(File_Name, true))
             {
-                writer.write(event.toString());
+                writer.write(event.getId()+" | "+event.getMessage()+" | "+event.getType());
                 writer.write(System.lineSeparator());
                 logger.info("Persisted event "+event);
                 return true;
@@ -43,9 +43,12 @@ public class EventFileInformationStore {
     public synchronized Optional<Event>getEventById(int id) {
         try (BufferedReader reader = new BufferedReader(new FileReader(File_Name))) {
             String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.contains("id" + id + ",")) {
-                    return Optional.of(parseEvent(line));
+            while ((line = reader.readLine()) != null)
+            {
+                String[] parts = line.split("\\|");
+                if (Integer.parseInt(parts[0])==id)
+                {
+                    return Optional.of(parseEvent(parts));
                 }
 
             }
@@ -54,17 +57,13 @@ public class EventFileInformationStore {
         }
         return Optional.empty();
     }
-        private Event parseEvent(String line)
+        private Event parseEvent(String []parts)
         {
-            String content=line.substring(line.indexOf("{")+1,line.indexOf("}"));
+            int id=Integer.parseInt(parts[0]);
+            String msg=parts[1];
+            EventType type=EventType.valueOf(parts[2]);
 
-            String[] part=content.split(",");
-
-            int id=Integer.parseInt(part[0].split("=")[1].trim());
-            String eventLoad=(part[1].split("=")[1].trim());
-            EventType type=EventType.valueOf(part[2].split("=")[1].trim());
-
-            return new Event(id,eventLoad,type);
+            return new Event(id,msg,type);
 
         }
 

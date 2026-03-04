@@ -17,10 +17,7 @@ public class EventQueue
     private boolean shutdown=false;
     private static final Logger logger=LoggerFactory.getLogger(EventQueue.class);
 
-    public EventQueue(
-            @Value("${eventflow.queue.capacity}")
-            int capacity
-    )
+    public EventQueue(int  capacity)
     {
         this.capacity=capacity;
     }

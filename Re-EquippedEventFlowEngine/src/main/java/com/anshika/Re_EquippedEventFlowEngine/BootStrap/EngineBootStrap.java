@@ -25,6 +25,7 @@ public class EngineBootStrap
     private static final Logger logger =
             LoggerFactory.getLogger(EngineBootStrap.class);
 
+
     private final EventQueue queue;
 
     private final EventRecovery recovery;
@@ -44,7 +45,7 @@ public class EngineBootStrap
     private int consumerThreads;
 
     @Value("${eventflow.consumer.max-retries}")
-    private int maxRetires;
+    private int maxRetries;
 
     @Value("${eventflow.producer.event-count}")
     private int producerEventCount;
@@ -68,7 +69,7 @@ public class EngineBootStrap
     public void startEngine()
     {
         logger.info("Starting EventFlowEngine...\n");
-        logger.info("Config | consumers= {} maxRetries= {} producerEvents= {} \n" ,consumerThreads,maxRetires,producerEventCount);
+        logger.info("Config | consumers= {} maxRetries= {} producerEvents= {} \n" ,consumerThreads,maxRetries,producerEventCount);
 
         recovery.loadEvents(queue, confirmStore);
 
@@ -78,7 +79,7 @@ public class EngineBootStrap
 
         for(int i=0;i<consumerThreads;i++)
         {
-            consumers[i]=new EventConsumer(queue,confirmStore,deadEvents,eventStore,maxRetires);
+            consumers[i]=new EventConsumer(queue,confirmStore,deadEvents,eventStore,maxRetries);
         }
         threadManager.startingEngine(producer, consumers);
 
