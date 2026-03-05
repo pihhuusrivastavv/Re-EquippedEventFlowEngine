@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="events")
 public class Event implements Comparable<Event>
 {
 
@@ -36,14 +38,29 @@ public class Event implements Comparable<Event>
         return id;
     }
 
+    public void setId(int id)
+    {
+        this.id=id;
+    }
+
     public String getMsg()
     {
         return msg;
     }
 
+    public void setMsg(String msg)
+    {
+        this.msg=msg;
+    }
+
     public EventType getType()
     {
         return type;
+    }
+
+    public void setType(EventType type)
+    {
+        this.type=type;
     }
 
     @Override
