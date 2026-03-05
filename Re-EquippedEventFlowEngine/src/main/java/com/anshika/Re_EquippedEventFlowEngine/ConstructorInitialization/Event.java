@@ -1,37 +1,59 @@
 package com.anshika.Re_EquippedEventFlowEngine.ConstructorInitialization;
-import java.lang.Comparable;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
+@Entity
 public class Event implements Comparable<Event>
 {
-    private final int id;
-    private final String msg;
-    private final EventType type;
 
-    public Event(int id, String msg,EventType type)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String msg;
+
+    @Enumerated(EnumType.STRING)
+    private EventType type;
+
+    public Event()
+    {
+    }
+
+    public Event(int id,String msg,EventType type)
     {
         this.id=id;
         this.msg=msg;
         this.type=type;
     }
+
     public int getId()
     {
         return id;
     }
-    public String getMessage()
+
+    public String getMsg()
     {
         return msg;
     }
+
     public EventType getType()
     {
         return type;
     }
+
     @Override
-    public int compareTo(Event otherEvent)
+    public int compareTo(Event e)
     {
-        return Integer.compare(otherEvent.type.getPriority(),this.type.getPriority());
+        return Integer.compare(e.type.getPriority(),this.type.getPriority());
     }
+
     public String toString()
     {
-        return id+"|"+msg;
+        return id+ " | "+msg;
     }
 }

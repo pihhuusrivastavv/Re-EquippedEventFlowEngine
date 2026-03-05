@@ -24,7 +24,7 @@ public class DeadAndFailedEventStore
     {
         try(FileWriter writer=new FileWriter(file_name,true))
         {
-            String record=LocalDateTime.now()+" | "+customerName+" | "+event.getType()+" | "+event.getId()+" | "+event.getMessage()+" | "+reason;
+            String record=LocalDateTime.now()+" | "+customerName+" | "+event.getType()+" | "+event.getId()+" | "+event.getMsg()+" | "+reason;
             logger.info("Record has been written into the file");
             writer.write(record);
             writer.write(System.lineSeparator());

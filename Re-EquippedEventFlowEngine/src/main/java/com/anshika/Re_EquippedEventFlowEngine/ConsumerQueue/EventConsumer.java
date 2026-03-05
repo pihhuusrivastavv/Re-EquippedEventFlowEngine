@@ -57,7 +57,7 @@ public class EventConsumer implements Runnable
                             logger.error("Error");
                         }
 
-                        logger.info(Thread.currentThread().getName() + " processed " + event.getType() + ":" + event.getMessage());
+                        logger.info(Thread.currentThread().getName() + " processed " + event.getType() + ":" + event.getMsg());
 
                         confirmStore.confirmedEvent(event.getId());
                         logger.info("Confirmed Event found");

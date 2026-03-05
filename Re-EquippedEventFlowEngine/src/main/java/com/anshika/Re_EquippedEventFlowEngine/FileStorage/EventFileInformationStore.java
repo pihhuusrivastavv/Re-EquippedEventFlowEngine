@@ -24,7 +24,7 @@ public class EventFileInformationStore {
         {
             try (FileWriter writer = new FileWriter(File_Name, true))
             {
-                writer.write(event.getId()+" | "+event.getMessage()+" | "+event.getType());
+                writer.write(event.getId()+" | "+event.getMsg()+" | "+event.getType());
                 writer.write(System.lineSeparator());
                 logger.info("Persisted event "+event);
                 return true;

@@ -29,7 +29,7 @@ public class EventQueue
         }
         queue.add(event);
 
-        logger.info("Event published | message= {} queueSize= {}",event.getMessage(),queue.size());
+        logger.info("Event published | message= {} queueSize= {}",event.getMsg(),queue.size());
 
         notifyAll();
     }
@@ -44,7 +44,7 @@ public class EventQueue
             return null;
         }
         Event event=queue.poll();
-        logger.info("Event consumed | message={} queueSize={}",event.getMessage(),queue.size());
+        logger.info("Event consumed | message={} queueSize={}",event.getMsg(),queue.size());
 
         notifyAll();
         return event;

@@ -36,7 +36,7 @@ public class EventProducer implements Runnable
                 if(file_info.persist(event))
                 {
                     queue.publish(event);
-                    logger.info("Produced Event | type={} message={}",event.getType(),event.getMessage());
+                    logger.info("Produced Event | type={} message={}",event.getType(),event.getMsg());
                 }
                 else
                 {

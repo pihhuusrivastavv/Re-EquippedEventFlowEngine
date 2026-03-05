@@ -21,7 +21,7 @@ public class EventStore
     {
         try(FileWriter writer=new FileWriter(file,true))
         {
-            String record= LocalDateTime.now()+" | "+event.getId()+" | "+event.getType()+" | "+event.getMessage()+"\n";
+            String record= LocalDateTime.now()+" | "+event.getId()+" | "+event.getType()+" | "+event.getMsg()+"\n";
             writer.write(record);
             logger.info("Event record written");
         }

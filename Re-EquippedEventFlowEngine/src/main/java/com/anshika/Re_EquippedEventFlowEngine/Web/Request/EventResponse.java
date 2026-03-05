@@ -13,7 +13,7 @@ public class EventResponse
     public EventResponse(Event event)
     {
         this.id=event.getId();
-        this.eventLoad=event.getMessage();
+        this.eventLoad=event.getMsg();
         this.type=event.getType().name();
     }
 
