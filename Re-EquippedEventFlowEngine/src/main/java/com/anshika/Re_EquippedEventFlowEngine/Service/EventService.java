@@ -1,6 +1,6 @@
 package com.anshika.Re_EquippedEventFlowEngine.Service;
 
-import com.anshika.Re_EquippedEventFlowEngine.Web.Request.EventResponse;
+import com.anshika.Re_EquippedEventFlowEngine.Web.Response.EventResponse;
 
 
 public interface  EventService

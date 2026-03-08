@@ -1,8 +1,9 @@
 package com.anshika.Re_EquippedEventFlowEngine.Service;
 
+import com.anshika.Re_EquippedEventFlowEngine.Exception.EventErrorException;
 import com.anshika.Re_EquippedEventFlowEngine.FileStorage.EventFileInformationStore;
 import com.anshika.Re_EquippedEventFlowEngine.ProducerQueue.EventPublisher;
-import com.anshika.Re_EquippedEventFlowEngine.Web.Request.EventResponse;
+import com.anshika.Re_EquippedEventFlowEngine.Web.Response.EventResponse;
 
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class EventServiceImplementation implements EventService
     @Override
     public EventResponse getEvent(int id)
     {
-        return file.getEventById(id).map(EventResponse::new).orElseThrow(()->new RuntimeException("Event not found, with id : "+id));
+        return file.getEventById(id).map(EventResponse::new).orElseThrow(()->new EventErrorException(id));
 
     }
 }

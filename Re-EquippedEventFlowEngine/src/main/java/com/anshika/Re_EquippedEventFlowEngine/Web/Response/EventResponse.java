@@ -1,7 +1,6 @@
-package com.anshika.Re_EquippedEventFlowEngine.Web.Request;
+package com.anshika.Re_EquippedEventFlowEngine.Web.Response;
 
 import com.anshika.Re_EquippedEventFlowEngine.ConstructorInitialization.Event;
-import com.anshika.Re_EquippedEventFlowEngine.ConstructorInitialization.EventType;
 
 public class EventResponse
 {

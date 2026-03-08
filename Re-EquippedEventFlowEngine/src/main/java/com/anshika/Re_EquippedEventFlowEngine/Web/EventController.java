@@ -1,9 +1,7 @@
 package com.anshika.Re_EquippedEventFlowEngine.Web;
 
-import com.anshika.Re_EquippedEventFlowEngine.ProducerQueue.EventPublisher;
 import com.anshika.Re_EquippedEventFlowEngine.Web.Request.CreateEventRequest;
-import com.anshika.Re_EquippedEventFlowEngine.Web.Request.EventResponse;
-import com.anshika.Re_EquippedEventFlowEngine.FileStorage.EventFileInformationStore;
+import com.anshika.Re_EquippedEventFlowEngine.Web.Response.EventResponse;
 import com.anshika.Re_EquippedEventFlowEngine.Service.EventService;
 
 import org.springframework.web.bind.annotation.PathVariable;
