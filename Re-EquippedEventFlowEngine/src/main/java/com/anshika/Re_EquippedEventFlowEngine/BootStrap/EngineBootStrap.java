@@ -9,6 +9,13 @@ import com.anshika.Re_EquippedEventFlowEngine.ConsumerQueue.EventConsumer;
 import com.anshika.Re_EquippedEventFlowEngine.StorageEvents.EventStore;
 import com.anshika.Re_EquippedEventFlowEngine.Engine.EventThreadManager;
 //import com.anshika.Re_EquippedEventFlowEngine.Engine.MultiConsumerRunnable;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
+
+
+
+
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -65,7 +72,7 @@ public class EngineBootStrap
         this.eventStore=eventStore;
     }
 
-    @PostConstruct
+
     public void startEngine()
     {
         logger.info("Starting EventFlowEngine...\n");
@@ -86,6 +93,7 @@ public class EngineBootStrap
         logger.info("EventFlowEngine started successfully.");
 
     }
+
 
     @PreDestroy
     public void shutdownEngine()

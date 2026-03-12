@@ -20,7 +20,7 @@ public class EventPublisher
 
     public void publish(String type,String eventLoad) throws InterruptedException
     {
-        Event event =new Event(eventIdCounter++,eventLoad,EventType.valueOf(type));
+        Event event =new Event(0,eventLoad,EventType.valueOf(type));
         queue.publish(event);
     }
 }

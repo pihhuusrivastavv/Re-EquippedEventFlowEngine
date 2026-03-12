@@ -14,7 +14,7 @@ import org.springframework.web.*;
 
 @Component
 public class EventFileInformationStore {
-    private final String File_Name = "events_info";
+    private final String File_Name = "events_info.txt";
     private final int max_retries = 3;
     private final static Logger logger= LoggerFactory.getLogger(EventFileInformationStore.class);
 
@@ -59,12 +59,12 @@ public class EventFileInformationStore {
     }
         private Event parseEvent(String []parts)
         {
-            int id=Integer.parseInt(parts[0]);
-            String msg=parts[1];
-            EventType type=EventType.valueOf(parts[2]);
+                int id = Integer.parseInt(parts[0].trim());
+                String msg = parts[1].trim();
+                EventType type = EventType.valueOf(parts[2].trim());
 
-            return new Event(id,msg,type);
+                return new Event(id, msg, type);
 
         }
 
-    }
+}

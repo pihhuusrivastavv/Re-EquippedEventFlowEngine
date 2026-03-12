@@ -39,8 +39,8 @@ public class EventConsumer implements Runnable
                 Event event = queue.consume();
                 if(event==null)
                 {
-                    logger.info("No events present");
-                    break;
+                    logger.info(Thread.currentThread().getName()+" queue shutdown observing");
+                    return;
                 }
 
                 if(confirmStore.isConfirmed(event.getId()))

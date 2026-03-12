@@ -32,11 +32,11 @@ public class EventProducer implements Runnable
             while(eventNumber<=totalEvents)
             {
                 EventType type = EventType.values()[random.nextInt(EventType.values().length)];
-                Event event =new Event(eventNumber," Event- "+eventNumber,type);
+                Event event =new Event(eventNumber," Event-"+eventNumber,type);
                 if(file_info.persist(event))
                 {
                     queue.publish(event);
-                    logger.info("Produced Event | type={} message={}",event.getType(),event.getMsg());
+                    logger.info("Produced Event id={} type={} message={}",event.getId(), event.getType(), event.getMsg());
                 }
                 else
                 {

@@ -26,7 +26,7 @@ public class EventThreadManager {
 
         consumerThreads = new Thread[consumers.length];
         for (int i = 0; i < consumers.length; i++) {
-            consumerThreads[i] = new Thread(consumers[i], "EVENT-CONSUMER " + i);
+            consumerThreads[i] = new Thread(consumers[i], "EVENT-CONSUMER-" + i);
             consumerThreads[i].start();
         }
     }

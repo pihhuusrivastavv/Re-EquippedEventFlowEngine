@@ -37,7 +37,7 @@ public class EventController
         return eventService.getEvent(id);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public void deleteEventById(@PathVariable int id)
     {
         eventService.deleteEvent(id);
