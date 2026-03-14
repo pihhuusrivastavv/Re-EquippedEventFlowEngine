@@ -1,0 +1,10 @@
+1 |  Event-1 | SEVERE
+2 |  Event-2 | INFO
+3 |  Event-3 | SEVERE
+4 |  Event-4 | SEVERE
+5 |  Event-5 | INFO
+6 |  Event-6 | INFO
+7 |  Event-7 | WARNING
+8 |  Event-8 | INFO
+9 |  Event-9 | SEVERE
+10 |  Event-10 | SEVERE

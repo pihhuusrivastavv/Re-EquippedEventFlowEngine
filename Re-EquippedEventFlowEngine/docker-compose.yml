@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:18
+    container_name: eventflow-postgres
+    environment:
+      POSTGRES_DB: eventflowdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gulluiloveusm143
+    ports:
+      - "5433:5432"
+    volumes:
+      - eventflow-postgres-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: 2reequipped-eventflow-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eventflowdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: gulluiloveusm143
+
+volumes:
+  eventflow-postgres-data:
