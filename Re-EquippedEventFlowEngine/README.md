@@ -62,13 +62,13 @@ The system simulates how real event-driven systems operate internally by impleme
 
 
 
-**!\[EventFlowEngine Architecture](docs/architecture (2).png)**
+The following diagram illustrates the internal architecture of the EventFlowEngine:
 
 
 
+!\[EventFlowEngine Architecture](docs/architecture.png)
 
 
-**EventFlowEngine follows an event-driven architecture.**
 
 
 
