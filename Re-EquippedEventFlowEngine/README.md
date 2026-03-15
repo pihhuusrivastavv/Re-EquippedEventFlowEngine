@@ -2,9 +2,9 @@
 
 
 
-A robust **event-driven backend engine** built using **Java 21, Spring Boot, Docker, and PostgreSQL.** 
+A robust **event-driven backend engine** built using **Java 21, Spring Boot, Docker, and PostgreSQL.**
 
-The project demonstrates core backend engineering concepts such as **concurrency, reliability,** 
+The project demonstrates core backend engineering concepts such as **concurrency, reliability,**
 
 **event recovery, and fault-tolerant event processing.**
 
@@ -62,13 +62,7 @@ The system simulates how real event-driven systems operate internally by impleme
 
 
 
-The following diagram illustrates the internal architecture of the EventFlowEngine:
-
-
-
-!\[EventFlowEngine Architecture](docs/architecture.png)
-
-
+**##** For the **diagrammatic representation** of the architecture please refer to: **Re-EquippedEventFlowEngine/docs/architecture.png**
 
 
 
@@ -110,11 +104,11 @@ Recovery Engine (on restart)
 
 &#x20;
 
-**## Multiple consumer threads** process the events concurrently. 
+**## Multiple consumer threads** process the events concurrently.
 
 
 
-**##** Successful events are acknowledged and persisted to PostgreSQL, while **failed events are retried or moved to a Dead Letter Queue (DLQ).** 
+**##** Successful events are acknowledged and persisted to PostgreSQL, while **failed events are retried or moved to a Dead Letter Queue (DLQ).**
 
 
 
@@ -266,11 +260,11 @@ The EventFlowEngine exposes the following endpoints:
 
 
 
-**POST   /events**       → create a new event  
+**POST   /events**       → create a new event
 
-**GET    /events**       → retrieve all events  
+**GET    /events**       → retrieve all events
 
-**GET    /events/{id}**  → retrieve event by ID  
+**GET    /events/{id}**  → retrieve event by ID
 
 **DELETE /events/{id}**  → delete event
 
@@ -282,7 +276,7 @@ The EventFlowEngine exposes the following endpoints:
 
 
 
-**Create Event** 
+**Create Event**
 
 
 
@@ -374,7 +368,7 @@ eventflow-app       | 2026-03-15T09:11:32.669Z  INFO 1 --- \[Re-EquippedEventFlo
 
 This project was built to practice **core backend engineering concepts** used in distributed systems:
 
-
+no
 
 * Producer–Consumer architecture
 
@@ -434,7 +428,7 @@ If running locally:
 
 
 
-* Author: Pihu Srivastav 
+* Author: Pihu Srivastav
 
 
 
@@ -479,10 +473,4 @@ If running locally:
 
 
 This project is intended for **educational and backend engineering practice purposes.**
-
-
-
-
-
-
 
